@@ -234,6 +234,8 @@ TEST_CASE("Large grid test", "") {
 
 TEST_CASE("Realistic large scale", "") {
   // 9x9, 5k words of varying sizes
+  // (not really, since words longer than 5 letters are filtered)
+  // so this test is useless ish
   std::ifstream wordsfile("words_medium.txt");
   std::vector<std::string> words;
   std::string word;

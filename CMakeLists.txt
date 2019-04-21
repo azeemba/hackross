@@ -28,11 +28,14 @@ set_target_properties (
 
 include(CTest)
 add_subdirectory(${CMAKE_SOURCE_DIR}/external/Catch2)
-add_subdirectory(tests)
 
-# Add source to this project's executable.
-add_executable (hackross "hackross.cpp" "hackross.h")
+add_library(hackross "hackross.cpp" "hackross.h")
 target_link_libraries (hackross z3)
 
 set_property(TARGET hackross PROPERTY CXX_STANDARD 14)
 
+# Add source to this project's executable.
+add_executable(hackross_main "main.cpp")
+target_link_libraries(hackross_main hackross)
+
+add_subdirectory(tests)
