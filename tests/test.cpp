@@ -13,7 +13,7 @@ std::vector<int> resolve_model(model m, Grid g) {
     auto v = m.get_const_decl(i);
     REQUIRE(v.arity() == 0);
     auto res = m.eval(g._nodes[i]);
-    REQUIRE(res.is_int());
+    REQUIRE(res.is_bv());
     REQUIRE(res.is_const());
     letter_values.push_back(res.get_numeral_int());
   }
@@ -244,7 +244,7 @@ TEST_CASE("Realistic large scale", "") {
 
   CHECK(words.size() > 5000);
   context c;
-  Grid g(6, c);
+  Grid g(5, c);
   solver s(c);
 
   s.add(g.constrain_grid_to_words(words));

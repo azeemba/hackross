@@ -8,6 +8,12 @@
 #include <vector>
 #include <z3++.h>
 
+void populate_bits(uint8_t n, bool* b) {
+  for (int i=0; i < 8; ++i) {
+    b[i] = (n & (1<<i)) != 0;
+  }
+}
+
 class Grid {
 public:
   z3::context &_context;
@@ -53,13 +59,19 @@ Grid::Grid(size_t size, z3::context &context)
     : _context(context), _size(size), _nodes(_context),
       _letter_values(_context) {
   for (size_t i = 0; i < size * size; ++i) {
-    _nodes.push_back(_context.int_const(std::to_string(i).c_str()));
+    _nodes.push_back(_context.bv_const(std::to_string(i).c_str(), 8));
   }
 
   for (int i = 0; i < 27; ++i) { // 0 - 26 (0, a-z)
-    _letter_values.push_back(_context.int_val(i));
+    uint8_t n = static_cast<char>(i);
+    bool b[8];
+    populate_bits(n, b);
+    bool const* ba = &b[0];
+    _letter_values.push_back(_context.bv_val(8, ba));
   }
 }
+
+
 
 z3::expr Grid::limit_node(int index, std::vector<int> letters) {
   const auto &node = _nodes[index];
